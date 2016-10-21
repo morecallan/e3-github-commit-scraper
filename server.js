@@ -2,6 +2,8 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
+let collectiveCommits = 0;
+
 // Gather all class Github Links provided in class data
 const classData = JSON.parse(fs.readFileSync('data/class-info.json', 'utf8'));
 const classGithubs = [];
@@ -17,7 +19,7 @@ let periods = ["2016-01-01&to=2016-01-31", "2016-02-01&to=2016-02-28", "2016-03-
 let currentMonth = new Date();
 currentMonth = currentMonth.getMonth();
 
-
+//Iterates through each of the classmembers and each given time period and scrapes the raw html data from github
 classGithubs.forEach((github)=>{
   for (var i = 0; i <= currentMonth; i++){
     fetch(`${github}?tab=overview&from=${periods[i]}`)
@@ -25,7 +27,19 @@ classGithubs.forEach((github)=>{
           return res.text();
       }).then(function(body) {
          const $ = cheerio.load(body);
-         console.log($($("#js-contribution-activity").find("h4.m-0")[0]).html());
+         collectiveCommits += commitNumberParser($($("#js-contribution-activity").find("h4.m-0")[0]).html().toString());
+         console.log(collectiveCommits)
       });
   }
 });
+
+//Uses regex to match the number of commits in that given time period
+const regex = /Created\n*\s*([0-9]+)\n*\s*commit/gi;
+const commitNumberParser = (string) => {
+  let result = regex.exec(string)
+  let returnNumber = 0;
+  if (result) {
+    returnNumber = Number(result[1])
+  }
+  return returnNumber
+}
