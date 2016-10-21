@@ -1,4 +1,6 @@
 const fs = require('fs');
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
 
 // Gather all class Github Links provided in class data
 const classData = JSON.parse(fs.readFileSync('data/class-info.json', 'utf8'));
@@ -14,3 +16,16 @@ let periods = ["2016-01-01&to=2016-01-31", "2016-02-01&to=2016-02-28", "2016-03-
 // Gets the current month so that it will only progress that far in period array.
 let currentMonth = new Date();
 currentMonth = currentMonth.getMonth();
+
+
+classGithubs.forEach((github)=>{
+  for (var i = 0; i <= currentMonth; i++){
+    fetch(`${github}?tab=overview&from=${periods[i]}`)
+      .then(function(res) {
+          return res.text();
+      }).then(function(body) {
+         const $ = cheerio.load(body);
+         console.log($($("#js-contribution-activity").find("h4.m-0")[0]).html());
+      });
+  }
+});
