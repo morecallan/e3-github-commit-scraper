@@ -1,0 +1,23 @@
+{
+  "name": "github-commit-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morecallan/e3-github-commit-scraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/morecallan/e3-github-commit-scraper/issues"
+  },
+  "homepage": "https://github.com/morecallan/e3-github-commit-scraper#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "node-fetch": "^1.6.3"
+  }
+}
