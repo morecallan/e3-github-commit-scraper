@@ -5,6 +5,8 @@ const { Server } = require('http');
 const express = require('express');
 const app = express();
 
+const PORT = process.env.PORT || 3000
+
 let collectiveCommits = 0;
 
 // Gather all class Github Links provided in class data
@@ -24,7 +26,7 @@ currentMonth = currentMonth.getMonth();
 
 //Iterates through each of the classmembers and each given time period and scrapes the raw html data from github
 const commitGenerate = new Promise(function(resolve, reject){
-  const expectedIterateCount = (currentMonth + 1) * (classGithubs.length)
+  const expectedIterateCount = (currentMonth + 1) * (classGithubs.length) - 1
   let iterateCount = 0;
     classGithubs.forEach((github)=>{
       for (var i = 0; i <= currentMonth; i++){
@@ -41,8 +43,6 @@ const commitGenerate = new Promise(function(resolve, reject){
     });
 })
 
-
-
 //Uses regex to match the number of commits in that given time period
 const regex = /Created\n*\s*([0-9]+)\n*\s*commit/gi;
 const commitNumberParser = (string) => {
@@ -54,6 +54,10 @@ const commitNumberParser = (string) => {
   return returnNumber
 }
 
+//ROUTE FOR API CALL
 app.get('/api/class-commits', (req, res, err) => {
-  commitGenerate.then((com)=> res.json({"commit": com}))
+  console.log(req)
+  commitGenerate.then((com)=> res.json({"commits": com}))
 })
+
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
