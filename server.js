@@ -5,7 +5,15 @@ const { Server } = require('http');
 const express = require('express');
 const app = express();
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
+
+
+// MIDDLEWARE (transform stream)
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 let collectiveCommits = 0;
 
