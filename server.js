@@ -75,7 +75,7 @@ const EfficientCommitGenerate = () => {
              const $ = cheerio.load(body);
              EfficientCommitNumberParser($($($(".js-contribution-graph")[0]).find("h2")[0]).html().toString()).then((number) => {collectiveCommits += number});
              iterateCount++
-             if (expectedIterateCount === iterateCount) {resolve({"collective commits": collectiveCommits, "students": classGithubs.length})}
+             if (expectedIterateCount === iterateCount) {resolve({"collectiveCommits": collectiveCommits, "students": classGithubs.length})}
           });
       })
     })
